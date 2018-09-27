@@ -11,7 +11,7 @@
         <shape
             android:shape="oval"
             >
-            <solid android:color="#0088cf"/>
+            <solid android:color="@color/super_couleur_bleue"/>
         </shape>
     </item>
 </layer-list>

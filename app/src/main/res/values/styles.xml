@@ -8,4 +8,8 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="McvDateText" parent="TextAppearance.MaterialCalendarWidget.Date">
+        <item name="android:textColor">@color/selector_mcv_date_text_color</item>
+    </style>
+
 </resources>

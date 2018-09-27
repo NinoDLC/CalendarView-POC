@@ -11,6 +11,7 @@ import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.OnRangeSelectedListener;
 import java.util.ArrayList;
 import java.util.List;
+import org.threeten.bp.LocalDate;
 
 public class MainActivity extends AppCompatActivity implements OnRangeSelectedListener, OnDateSelectedListener {
     
@@ -22,6 +23,18 @@ public class MainActivity extends AppCompatActivity implements OnRangeSelectedLi
         super.onCreate(savedInstanceState);
         
         setContentView(R.layout.activity_main);
+        
+        DayViewDecorator pastDaysDecorator = new DayViewDecorator() {
+            @Override
+            public boolean shouldDecorate(CalendarDay calendarDay) {
+                return calendarDay.getDate().isBefore(LocalDate.now());
+            }
+            
+            @Override
+            public void decorate(DayViewFacade dayViewFacade) {
+                dayViewFacade.setDaysDisabled(true);
+            }
+        };
         
         DayViewDecorator singleDayDecorator = new DayViewDecorator() {
             @Override
@@ -93,9 +106,13 @@ public class MainActivity extends AppCompatActivity implements OnRangeSelectedLi
         };
         
         MaterialCalendarView materialCalendarView = findViewById(R.id.material_calendar_view);
+        materialCalendarView.setSelectionMode(MaterialCalendarView.SELECTION_MODE_RANGE);
+        materialCalendarView.setSelectionColor(R.color.super_couleur_bleue);
+        materialCalendarView.setDateTextAppearance(R.style.McvDateText);
         materialCalendarView.setOnDateChangedListener(this);
         materialCalendarView.setOnRangeSelectedListener(this);
-        materialCalendarView.addDecorators(singleDayDecorator,
+        materialCalendarView.addDecorators(pastDaysDecorator,
+                                           singleDayDecorator,
                                            firstDayDecorator,
                                            continuousDayDecorator,
                                            lastDayDecorator);

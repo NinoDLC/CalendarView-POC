@@ -10,7 +10,7 @@
         <shape
             android:shape="rectangle"
             >
-            <solid android:color="#220088cf"/>
+            <solid android:color="@color/super_couleur_bleue_mais_un_peu_noire"/>
         </shape>
     </item>
     <item
@@ -25,7 +25,7 @@
             <solid android:color="#fff"/>
             <stroke
                 android:width="2dp"
-                android:color="#0088cf" />
+                android:color="@color/super_couleur_bleue" />
         </shape>
     </item>
 </layer-list>
