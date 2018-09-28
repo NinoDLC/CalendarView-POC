@@ -1,8 +1,10 @@
 package com.example.nino.calendarviewdemo;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.style.ForegroundColorSpan;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
@@ -15,6 +17,11 @@ import org.threeten.bp.LocalDate;
 
 public class MainActivity extends AppCompatActivity implements OnRangeSelectedListener, OnDateSelectedListener {
     
+    // Arbitrary "anchor" starting date that user cannot modify when he's selecting the return date
+    private LocalDate mAnchorDate;
+    // Necessary only because MaterialCalendarView.selectRange() takes CalendarDays as parameter...
+    private CalendarDay mAnchorDay;
+    
     @NonNull
     private List<CalendarDay> mSelectedDays = new ArrayList<>();
     
@@ -24,10 +31,12 @@ public class MainActivity extends AppCompatActivity implements OnRangeSelectedLi
         
         setContentView(R.layout.activity_main);
         
+        mAnchorDate = LocalDate.now();
+        
         DayViewDecorator pastDaysDecorator = new DayViewDecorator() {
             @Override
             public boolean shouldDecorate(CalendarDay calendarDay) {
-                return calendarDay.getDate().isBefore(LocalDate.now());
+                return calendarDay.getDate().isBefore(mAnchorDate);
             }
             
             @Override
@@ -86,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements OnRangeSelectedLi
             @Override
             public void decorate(DayViewFacade dayViewFacade) {
                 dayViewFacade.setSelectionDrawable(getResources().getDrawable(R.drawable.rectangle));
+                dayViewFacade.addSpan(new ForegroundColorSpan(Color.BLACK));
             }
         };
         
@@ -102,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements OnRangeSelectedLi
             @Override
             public void decorate(DayViewFacade dayViewFacade) {
                 dayViewFacade.setSelectionDrawable(getResources().getDrawable(R.drawable.end_of_range));
+                dayViewFacade.addSpan(new ForegroundColorSpan(getResources().getColor(R.color.super_couleur_bleue)));
             }
         };
         
@@ -116,6 +127,9 @@ public class MainActivity extends AppCompatActivity implements OnRangeSelectedLi
                                            firstDayDecorator,
                                            continuousDayDecorator,
                                            lastDayDecorator);
+        materialCalendarView.setSelectedDate(mAnchorDate); // Should change in production code
+        mAnchorDay = materialCalendarView.getSelectedDate();
+        mSelectedDays.add(mAnchorDay);
     }
     
     @Override
@@ -130,12 +144,7 @@ public class MainActivity extends AppCompatActivity implements OnRangeSelectedLi
     public void onDateSelected(@NonNull MaterialCalendarView materialCalendarView,
                                @NonNull CalendarDay calendarDay,
                                boolean selected) {
-        mSelectedDays.clear();
-        
-        if (selected) {
-            mSelectedDays.add(calendarDay);
-        }
-        
-        materialCalendarView.invalidateDecorators();
+        // User is not allowed to select a single date, only a range
+        materialCalendarView.selectRange(mAnchorDay, calendarDay);
     }
 }

@@ -4,6 +4,6 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="super_couleur_bleue_mais_un_peu_noire">#220088cf</color>
+    <color name="super_couleur_bleue_mais_un_peu_transparente">#220088cf</color>
     <color name="super_couleur_bleue">#0088cf</color>
 </resources>
